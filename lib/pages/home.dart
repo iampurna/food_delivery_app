@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/pages/details.dart';
 import 'package:food_delivery/widgets/widget_support.dart';
 
 class Home extends StatefulWidget {
@@ -54,6 +55,44 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Details()));
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(5),
+                      child: Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.all(14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                "assets/images/salad2.png",
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                              Text("Veggie Taco Hash",
+                                  style: AppWidget.semiBoldTextFieldStyle()),
+                              const SizedBox(height: 5.0),
+                              Text("Fresh and Healthy",
+                                  style: AppWidget.lightTextFieldStyle()),
+                              const SizedBox(height: 5.0),
+                              Text("\$25",
+                                  style: AppWidget.semiBoldTextFieldStyle())
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 15.0),
                   Container(
                     margin: const EdgeInsets.all(5),
                     child: Material(
@@ -65,18 +104,18 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image.asset(
-                              "assets/images/salad2.png",
+                              "assets/images/salad4.png",
                               height: 150,
                               width: 150,
                               fit: BoxFit.cover,
                             ),
-                            Text("Veggie Taco Hash",
+                            Text("Mix Veg Salad",
                                 style: AppWidget.semiBoldTextFieldStyle()),
                             const SizedBox(height: 5.0),
-                            Text("Fresh and Healthy",
+                            Text("Spicy with Onion",
                                 style: AppWidget.lightTextFieldStyle()),
                             const SizedBox(height: 5.0),
-                            Text("\$25",
+                            Text("\$29",
                                 style: AppWidget.semiBoldTextFieldStyle())
                           ],
                         ),
@@ -115,7 +154,60 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-            )
+            ),
+            const SizedBox(height: 30.0),
+            Container(
+              margin: const EdgeInsets.only(right: 20.0),
+              child: Material(
+                elevation: 5.0,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        "assets/images/salad2.png",
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(
+                        width: 20.0,
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Text(
+                                "Veggie Taco Hash",
+                                style: AppWidget.semiBoldTextFieldStyle(),
+                              )),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Text(
+                                "Honey goot cheese",
+                                style: AppWidget.lightTextFieldStyle(),
+                              )),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Text(
+                                "\$28",
+                                style: AppWidget.semiBoldTextFieldStyle(),
+                              ))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

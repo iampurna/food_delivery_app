@@ -202,7 +202,7 @@ class _HomeState extends State<Home> {
                                 style: AppWidget.semiBoldTextFieldStyle(),
                               ))
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

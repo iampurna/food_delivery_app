@@ -1,4 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/pages/bottomnav.dart';
 import 'package:food_delivery/pages/login.dart';
 import 'package:food_delivery/widgets/widget_support.dart';
 
@@ -10,6 +14,49 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  String email = '', name = '', password = '';
+
+  TextEditingController namecontroller = new TextEditingController();
+  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController mailcontroller = new TextEditingController();
+
+  final _formkey = GlobalKey<FormState>();
+
+  registration() async {
+    if (password != null) {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        ScaffoldMessenger.of(context).showSnackBar(
+          (const SnackBar(
+              backgroundColor: Colors.redAccent,
+              content: Text(
+                "Registration Successfull",
+                style: TextStyle(fontSize: 20.0),
+              ))),
+        );
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const Bottomnav()));
+      } on FirebaseException catch (e) {
+        if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar((const SnackBar(
+              backgroundColor: Colors.orangeAccent,
+              content: Text(
+                "Too weak password",
+                style: TextStyle(fontSize: 18.0),
+              ))));
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar((const SnackBar(
+              backgroundColor: Colors.orangeAccent,
+              content: Text(
+                "Account Already Exist",
+                style: TextStyle(fontSize: 18.0),
+              ))));
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,60 +108,97 @@ class _SignUpState extends State<SignUp> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 30.0),
-                          Text(
-                            "Sign up",
-                            style: AppWidget.headlineTextFieldStyle(),
-                          ),
-                          const SizedBox(height: 30.0),
-                          TextField(
-                            decoration: InputDecoration(
-                                hintText: 'Name',
-                                hintStyle: AppWidget.semiBoldTextFieldStyle(),
-                                prefixIcon: const Icon(Icons.person_outlined)),
-                          ),
-                          const SizedBox(height: 30.0),
-                          TextField(
-                            decoration: InputDecoration(
-                                hintText: 'Email',
-                                hintStyle: AppWidget.semiBoldTextFieldStyle(),
-                                prefixIcon: const Icon(Icons.email_outlined)),
-                          ),
-                          const SizedBox(height: 30.0),
-                          TextField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                hintText: 'Password',
-                                hintStyle: AppWidget.semiBoldTextFieldStyle(),
-                                prefixIcon:
-                                    const Icon(Icons.password_outlined)),
-                          ),
-                          const SizedBox(height: 80.0),
-                          Material(
-                            elevation: 5.0,
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: const Color(0Xffff5722),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Center(
-                                  child: Text(
-                                "SIGN UP",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.0,
-                                    fontFamily: 'Poppins1',
-                                    fontWeight: FontWeight.bold),
-                              )),
+                      child: Form(
+                        key: _formkey,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 30.0),
+                            Text(
+                              "Sign up",
+                              style: AppWidget.headlineTextFieldStyle(),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 30.0),
+                            TextFormField(
+                              controller: namecontroller,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Enter Name';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  hintText: 'Name',
+                                  hintStyle: AppWidget.semiBoldTextFieldStyle(),
+                                  prefixIcon:
+                                      const Icon(Icons.person_outlined)),
+                            ),
+                            const SizedBox(height: 30.0),
+                            TextFormField(
+                              controller: mailcontroller,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Enter E-mail';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  hintText: 'Email',
+                                  hintStyle: AppWidget.semiBoldTextFieldStyle(),
+                                  prefixIcon: const Icon(Icons.email_outlined)),
+                            ),
+                            const SizedBox(height: 30.0),
+                            TextFormField(
+                              controller: passwordcontroller,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Enter Password';
+                                }
+                                return null;
+                              },
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  hintStyle: AppWidget.semiBoldTextFieldStyle(),
+                                  prefixIcon:
+                                      const Icon(Icons.password_outlined)),
+                            ),
+                            const SizedBox(height: 80.0),
+                            GestureDetector(
+                              onTap: () async {
+                                if (_formkey.currentState!.validate()) {
+                                  setState(() {
+                                    email = mailcontroller.text;
+                                    name = namecontroller.text;
+                                    password = passwordcontroller.text;
+                                  });
+                                }
+                                registration();
+                              },
+                              child: Material(
+                                elevation: 5.0,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0Xffff5722),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Center(
+                                      child: Text(
+                                    "SIGN UP",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontFamily: 'Poppins1',
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -123,8 +207,10 @@ class _SignUpState extends State<SignUp> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => LogIn()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LogIn()));
                       },
                       child: Text(
                         "Already have an account? Login",

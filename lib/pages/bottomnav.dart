@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/pages/home.dart';
 import 'package:food_delivery/pages/order.dart';
 import 'package:food_delivery/pages/profile.dart';
-import 'package:food_delivery/pages/wallet.dart';
+// import 'package:food_delivery/pages/wallet.dart';
 
 class Bottomnav extends StatefulWidget {
   const Bottomnav({super.key});
@@ -20,15 +20,20 @@ class _BottomnavState extends State<Bottomnav> {
   late Home homepage;
   late Profile profile;
   late Order order;
-  late Wallet wallet;
+  //late Wallet wallet;
 
   @override
   void initState() {
     homepage = const Home();
     order = const Order();
     profile = const Profile();
-    wallet = const Wallet();
-    pages = [homepage, order, wallet, profile];
+    // wallet = const Wallet();
+    pages = [
+      homepage,
+      order,
+      //wallet,
+      profile
+    ];
     super.initState();
   }
 
